@@ -25,7 +25,7 @@
 # relative to the canonical path of this script.
 #
 
-# use POSIX interface, symlink is followed automatically
+# use POSTIX interface, symlink is followed automatically
 ZOOBIN="${BASH_SOURCE-$0}"
 ZOOBIN="$(dirname "${ZOOBIN}")"
 ZOOBINDIR="$(cd "${ZOOBIN}"; pwd)"
@@ -39,15 +39,13 @@ fi
 ZOODATADIR="$(grep "^[[:space:]]*dataDir=" "$ZOOCFG" | sed -e 's/.*=//')"
 ZOODATALOGDIR="$(grep "^[[:space:]]*dataLogDir=" "$ZOOCFG" | sed -e 's/.*=//')"
 
-ZOO_LOG_FILE=zookeeper-$USER-cleanup-$HOSTNAME.log
-
 if [ "x$ZOODATALOGDIR" = "x" ]
 then
-"$JAVA" "-Dzookeeper.log.dir=${ZOO_LOG_DIR}" "-Dzookeeper.log.file=${ZOO_LOG_FILE}" \
+"$JAVA" "-Dzookeeper.log.dir=${ZOO_LOG_DIR}" "-Dzookeeper.root.logger=${ZOO_LOG4J_PROP}" \
      -cp "$CLASSPATH" $JVMFLAGS \
      org.apache.zookeeper.server.PurgeTxnLog "$ZOODATADIR" $*
 else
-"$JAVA" "-Dzookeeper.log.dir=${ZOO_LOG_DIR}" "-Dzookeeper.log.file=${ZOO_LOG_FILE}" \
+"$JAVA" "-Dzookeeper.log.dir=${ZOO_LOG_DIR}" "-Dzookeeper.root.logger=${ZOO_LOG4J_PROP}" \
      -cp "$CLASSPATH" $JVMFLAGS \
      org.apache.zookeeper.server.PurgeTxnLog "$ZOODATALOGDIR" "$ZOODATADIR" $*
 fi
